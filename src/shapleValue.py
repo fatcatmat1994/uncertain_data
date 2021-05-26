@@ -27,8 +27,9 @@ class ShapleyValue(object):
             v1 = self.VS[L_pSt]
             L_pSt.add_point(p)
             v2 = self.VS[L_pSt]
-            permutation.SV[p.label] += self.__computes(v1, v2, S_length)
-            self.SV[p.label] += permutation.SV[p.label] * prob
+
+            # update
+
             S_length += 1
 
     def pShapleyValue(self):

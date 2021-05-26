@@ -5,6 +5,7 @@ class Point(object):
         self.label = label
         self.no = no
         self.prob = prob
+        self.SV = 0
         self.__describe = self.label + '_' + str(self.no) + "@" + str(self.prob)
 
     def get_desc(self):
@@ -77,12 +78,13 @@ class PointLabels(object):
         该类定义了标签的结构 例如A {1, 2, 3}
         :param label: 标签类型 例如A
         '''
-        self.master_label = master_label
+        self.__master_label = master_label
+        self.__SV = 0
         self.__members = []
         self.__iter_num = -1
 
     def __repr__(self):
-        return f"PointLabels({self.master_label}@{list(range(len(self.__members)))})"
+        return f"PointLabels({self.__master_label}@{list(range(len(self.__members)))})"
 
     def __len__(self):
         return len(self.__members)
@@ -96,6 +98,16 @@ class PointLabels(object):
             self.__iter_num = -1
             raise StopIteration
         return self.__members[self.__iter_num]
+
+    def __update_SV(self):
+        self.__SV = sum([p.SV * p.prob for p in self.__members])
+
+    def get_lab(self):
+        return self.__master_label
+
+    def get_SV(self):
+        self.__update_SV()
+        return self.__SV
 
     def get_member(self):
         return self.__members

@@ -1,11 +1,12 @@
-from pointBase import Point, PointSet, PointLabels
+from pointBase import PointSet
 from dataLoader import DataSet
 
 class Permutation(object):
     def __init__(self, pSt: PointSet, order: dict):
         self.pSt = pSt
+        # self.order = {"loc": Point_Object}
+        self.SV = 0
         self.order = order
-        self.SV = {p.label: 0.0 for p in self.pSt}
         self.__iter_num = -1
 
     def __iter__(self):

@@ -2,8 +2,8 @@ from pointBase import PointSet
 
 
 class BucketMember(object):
-    def __init__(self, per: PointSet, master: PointSet, diffNum: int, diff_set: PointSet):
-        self.per = per
+    def __init__(self, member: PointSet, master: PointSet, diffNum: int, diff_set: PointSet):
+        self.member = member
         self.master = master
         self.diffNum = diffNum
         self.diff_set = diff_set
@@ -26,29 +26,23 @@ class Bucket(object):
 
 class BucketSet(object):
     def __init__(self):
-        self.buckets = {}
+        self.__buckets = {}
         self.max_diffNum = 0
-        self.iter_num = -1
+
+    def __getitem__(self, item):
+        return self.__buckets[item]
 
     def add_bucket(self, bucket: Bucket):
         self.max_diffNum += 1
-        self.buckets[self.max_diffNum] = bucket
+        self.__buckets[self.max_diffNum] = bucket
         print("Success Add bucket")
 
-    def __iter__(self):
-        return self
+    def items(self):
+        return self.__buckets.items()
 
-    def __next__(self):
-        self.iter_num += 1
-        if self.iter_num >= self.max_diffNum:
-            self.iter_num = -1
-            raise StopIteration
-        return self.iter_num, self.buckets[self.iter_num]
-
-
-def setBucket(per: PointSet, bucket_list: BucketSet):
+def setBucket(per: PointSet, bucket_set: BucketSet):
     flag = False
-    for diffNum, bucket in bucket_list:
+    for diffNum, bucket in bucket_set.items():
         bucket_master = bucket.master
         diff = bucket_master.differ(per)
         if diffNum == len(diff):
@@ -58,4 +52,4 @@ def setBucket(per: PointSet, bucket_list: BucketSet):
 
     if not flag:
         new_bucket = Bucket(master=per)
-        bucket_list.add_bucket(new_bucket)
+        bucket_set.add_bucket(new_bucket)

@@ -79,6 +79,9 @@ class DataSet(object):
         self.__trans_lab()
         self.__trans_values()
 
+    def get_SV(self):
+        return {lab:p_lab.get_SV() for lab, p_lab in self.__NLabs.items()}
+
     def get_S2Pst(self):
         return self.__S2Pst
 
@@ -102,29 +105,12 @@ def read_json(file_path):
     return data
 
 if __name__ == '__main__':
-    points = ["A", "B"]
+    from utils import load_json
 
-    prob = {
-        "A_0": 0.5,
-        "A_1": 0.5,
-        "B_0": 0.3,
-        "B_1": 0.7
-    }
-    vs = {
-        "A_0": 1,
-        "A_1": 2,
-        "B_0": 3,
-        "B_1": 4,
-        "A_0,B_0": 5,
-        "A_0, B_1" :  6,
-        "A_1,B_0": 6,
-        "A_1, B_1": 9
-    }
-
-    data = {"prob": prob, "vs": vs, "points": points}
-    with open("../data/test.json", "w") as f:
-        json.dump(data, f)
-
+    f_pth = "../data/test.json"
+    data = load_json(f_pth)
+    # data = {"prob": prob, "vs": vs, "points": points}
+    prob, vs, points = data["prob"], data["vs"], data["points"]
     dt = DataSet(points, prob, vs)
     print("S2P: ", dt.get_S2P())
     print("S2Pst", dt.get_S2Pst())
@@ -133,6 +119,5 @@ if __name__ == '__main__':
     print("LABELS: ", dt.get_labs())
 
     d = dt.get_values()
-    print(d is dt.get_values())
-    SV = {p.label: 0.0 for p in dt.get_pSt()}
-    print(SV)
+    print(dt.get_SV())
+
