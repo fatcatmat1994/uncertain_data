@@ -1,4 +1,5 @@
 from math import log, exp
+from random import choice, Random
 
 class Point(object):
     def __init__(self, label: str, no: int, prob: float):
@@ -118,6 +119,8 @@ class PointLabels(object):
     def sort(self):
         self.__members.sort(reverse = True)
 
+    def random_choice(self, random_choice: Random)->Point:
+        return random_choice.choice(self.__members)
 
 if __name__ == '__main__':
     p = PointSet()
