@@ -8,13 +8,17 @@ class DataSet(object):
         self.__OProb = prob
         self.__OVs = vs
         self.__NLabs = {lab: PointLabels(master_label = lab) for lab in master_labs}
+
         self.__NVs = {PointSet() : 0} # 空集
-        self.length = len(points)
+        self.length = len(master_labs)
 
         # 这两个为了保持不同地方引用的对象一致
         self.__S2Pst = {} # String to PointSet-Object
         self.__S2P = {} # String to Point-Object
         self.__transform()
+        self.PROB_WORLD = 1
+        for value in self.__NLabs.values():
+            self.PROB_WORLD *= len(value)
 
     def __len__(self):
         return self.length
@@ -45,6 +49,8 @@ class DataSet(object):
             self.__S2P[lab_str] = p
             # 设置Labels
             self.__NLabs[lab].add_point(p)
+
+
 
     def __trans_values(self):
         """

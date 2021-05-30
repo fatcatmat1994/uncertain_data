@@ -1,5 +1,5 @@
 from math import log, exp
-from random import choice, Random
+from random import Random
 
 class Point(object):
     def __init__(self, label: str, no: int, prob: float):
@@ -62,6 +62,11 @@ class PointSet(object):
         self.__prob += log(p.prob)
         self.__update()
 
+    def remove_point(self, p: Point):
+        self.__pSt.remove(p)
+        self.__prob -= log(p.prob)
+        self.__update()
+
     def differ(self, other):
         c = self.__pSt.union(other.__pointSet)
         diff = self.__pSt - c
@@ -84,6 +89,9 @@ class PointLabels(object):
         self.__members = []
         self.__iter_num = -1
 
+    def __getitem__(self, item)->Point:
+        return self.__members[item]
+
     def __repr__(self):
         return f"PointLabels({self.__master_label}@{list(range(len(self.__members)))})"
 
@@ -103,18 +111,20 @@ class PointLabels(object):
     def __update_SV(self):
         self.__SV = sum([p.SV * p.prob for p in self.__members])
 
-    def get_lab(self):
+    def get_master_lab(self):
         return self.__master_label
 
     def get_SV(self):
         self.__update_SV()
         return self.__SV
 
-    def get_member(self):
-        return self.__members
-
     def add_point(self, p: Point):
         self.__members.append(p)
+
+    def replace(self, old_p: Point, new_p: Point):
+        idx = self.__members.index(old_p)
+        self.__members[idx] = new_p
+
 
     def sort(self):
         self.__members.sort(reverse = True)
@@ -136,3 +146,17 @@ if __name__ == '__main__':
         print(t)
     for t in iter(p):
         print(t)
+    import copy
+    d = copy.deepcopy(p)
+    print(d)
+    print(d == p)
+    i = []
+    j = []
+    for x in d:
+        i.append(x)
+    for x in p:
+        j.append(x)
+    for x in range(len(i)):
+        print(i[x])
+        print(j[x])
+        print(i[x] is j[x])
